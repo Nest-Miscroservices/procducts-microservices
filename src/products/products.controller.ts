@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, ParseIntPipe } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -20,8 +20,8 @@ export class ProductsController {
   }
 
   @MessagePattern({ cmd: 'find_one_product' })
-  findOne(@Payload('id') id: string) {
-    return this.productsService.findOne(+id);
+  findOne(@Payload('id', ParseIntPipe) id: number) {
+    return this.productsService.findOne(id);
   }
 
   @MessagePattern({ cmd: 'update_product' })
@@ -30,7 +30,7 @@ export class ProductsController {
   }
 
   @MessagePattern({ cmd: 'delete_product' })
-  remove(@Payload('id') id: string) {
-    return this.productsService.remove(+id);
+  remove(@Payload('id', ParseIntPipe) id: number) {
+    return this.productsService.remove(id);
   }
 }
